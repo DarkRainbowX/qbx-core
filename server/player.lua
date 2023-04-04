@@ -9,9 +9,9 @@ GlobalState.PlayerCount = 0
 function QBCore.Player.Login(source, citizenid, newData)
     if source and source ~= '' then
         if citizenid then
-            local license, license2 = QBCore.Functions.GetIdentifier(source, 'license'), QBCore.Functions.GetIdentifier(source, 'license2')
+            local license = QBCore.Functions.GetIdentifier(source, 'steam')
             local PlayerData = FetchPlayerEntity(citizenid)
-            if PlayerData and license == PlayerData.license or PlayerData and license2 == PlayerData.license then
+            if PlayerData and license == PlayerData.license then
                 QBCore.Player.CheckPlayerData(source, PlayerData)
             else
                 DropPlayer(source, Lang:t("info.exploit_dropped"))
@@ -42,7 +42,7 @@ function QBCore.Player.CheckPlayerData(source, PlayerData)
     local Offline = true
     if source then
         PlayerData.source = source
-        PlayerData.license = PlayerData.license or QBCore.Functions.GetIdentifier(source, 'license2')
+        PlayerData.license = PlayerData.license or QBCore.Functions.GetIdentifier(source, 'steam')
         PlayerData.name = GetPlayerName(source)
         Offline = false
     end
@@ -65,6 +65,7 @@ function QBCore.Player.CheckPlayerData(source, PlayerData)
     PlayerData.charinfo.nationality = PlayerData.charinfo.nationality or 'USA'
     PlayerData.charinfo.phone = PlayerData.charinfo.phone or QBCore.Player.GenerateUniqueIdentifier('PhoneNumber')
     PlayerData.charinfo.account = PlayerData.charinfo.account or QBCore.Player.GenerateUniqueIdentifier('AccountNumber')
+    PlayerData.charinfo.iban = PlayerData.charinfo.iban ~= nil and PlayerData.charinfo.iban or math.random(0,999999)
     -- Metadata
     PlayerData.metadata = PlayerData.metadata or {}
     PlayerData.metadata.health = PlayerData.metadata.health or 200
@@ -502,9 +503,9 @@ end
 -- Delete character
 
 function QBCore.Player.DeleteCharacter(source, citizenid)
-    local license, license2 = QBCore.Functions.GetIdentifier(source, 'license'), QBCore.Functions.GetIdentifier(source, 'license2')
+    local license = QBCore.Functions.GetIdentifier(source, 'steam')
     local result = FetchPlayerEntity(citizenid).license
-    if license == result or license2 == result then
+    if license == result then
         CreateThread(function()
             local success = DeletePlayerEntity(citizenid)
             if success then
