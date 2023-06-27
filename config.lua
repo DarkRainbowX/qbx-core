@@ -7,6 +7,7 @@ QBConfig.StatusInterval = 2.5 -- how often to check hunger/thirst status in minu
 
 QBConfig.Money = {}
 
+---@alias MoneyType 'cash' | 'bank' | 'crypto'
 ---@alias Money {cash: number, bank: number, crypto: number}
 ---@type Money
 QBConfig.Money.MoneyTypes = { cash = 500, bank = 500, crypto = 0 } -- type = startamount - Add or remove money types for your server (for ex. blackmoney = 0), remember once added it will not be removed from the database!
@@ -29,7 +30,7 @@ QBConfig.Player.Bloodtypes = {
 QBConfig.Player.IdentifierTypes = {
     ['citizenid'] = {
         valueFunction = function()
-            return tostring(QBCore.Shared.RandomStr(3) .. QBCore.Shared.RandomInt(5)):upper()
+            return tostring(RandomLetter(3) .. RandomNumber(5)):upper()
         end,
     },
     ['AccountNumber'] = {
@@ -44,7 +45,7 @@ QBConfig.Player.IdentifierTypes = {
     },
     ['FingerId'] = {
         valueFunction = function()
-            return tostring(QBCore.Shared.RandomStr(2) .. QBCore.Shared.RandomInt(3) .. QBCore.Shared.RandomStr(1) .. QBCore.Shared.RandomInt(2) .. QBCore.Shared.RandomStr(3) .. QBCore.Shared.RandomInt(4))
+            return tostring(RandomLetter(2) .. RandomNumber(3) .. RandomLetter(1) .. RandomNumber(2) .. RandomLetter(3) .. RandomNumber(4))
         end,
     },
     ['WalletId'] = {

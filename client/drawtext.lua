@@ -1,3 +1,4 @@
+---@enum Position
 local positions = {
     left = 'left-center',
     right = 'right-center',
@@ -14,6 +15,8 @@ local function hideText()
     lib.hideTextUI()
 end
 
+---@param text string
+---@param position Position
 local function drawText(text, position)
     position = positions[position] or position
     lib.showTextUI(text, {
@@ -21,6 +24,8 @@ local function drawText(text, position)
     })
 end
 
+---@param text string
+---@param position Position
 local function changeText(text, position)
     position = positions[position] or position
     lib.hideTextUI()
@@ -49,6 +54,22 @@ RegisterNetEvent('qb-core:client:HideText', function()
 end)
 
 RegisterNetEvent('qb-core:client:KeyPressed', function()
+    keyPressed()
+end)
+
+RegisterNetEvent('qbx-core:client:DrawText', function(text, position)
+    drawText(text, position)
+end)
+
+RegisterNetEvent('qbx-core:client:ChangeText', function(text, position)
+    changeText(text, position)
+end)
+
+RegisterNetEvent('qbx-core:client:HideText', function()
+    hideText()
+end)
+
+RegisterNetEvent('qbx-core:client:KeyPressed', function()
     keyPressed()
 end)
 

@@ -1,7 +1,7 @@
 fx_version 'cerulean'
 game 'gta5'
 
-description 'QB-Core'
+description 'QBX-Core'
 version '1.0.0'
 
 shared_scripts {
@@ -9,7 +9,8 @@ shared_scripts {
     'shared/*.lua',
     'locale/en.lua',
     'locale/*.lua',
-    '@ox_lib/init.lua'
+    '@ox_lib/init.lua',
+    'import.lua'
 }
 
 client_scripts {
@@ -31,6 +32,14 @@ server_scripts {
     'server/debug.lua',
     'server/loops.lua',
     'server/storage.lua',
+}
+
+modules {
+    'utils'
+}
+
+files {
+    'modules/*.lua'
 }
 
 dependency 'oxmysql'

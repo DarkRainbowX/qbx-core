@@ -1,48 +1,62 @@
+---@alias Source integer
+
+---@type table<Source, Player>
 QBCore.Players = {}
+
+---@type Player
 QBCore.Player = {}
+
 GlobalState.PlayerCount = 0
 
--- On player login get their data or set defaults
--- Don't touch any of this unless you know what you are doing
--- Will cause major issues!
+---@class PlayerData : PlayerEntity
+---@field source? Source present if player is online
+---@field optin? boolean present if player is online
 
+---On player login get their data or set defaults
+---Don't touch any of this unless you know what you are doing
+---Will cause major issues!
+---@param source Source
+---@param citizenid? string
+---@param newData PlayerEntity
+---@return boolean sourceExists true if source exists
 function QBCore.Player.Login(source, citizenid, newData)
-    if source and source ~= '' then
-        if citizenid then
-            local license = QBCore.Functions.GetIdentifier(source, 'steam')
-            local PlayerData = FetchPlayerEntity(citizenid)
-            if PlayerData and license == PlayerData.license then
-                QBCore.Player.CheckPlayerData(source, PlayerData)
-            else
-                DropPlayer(source, Lang:t("info.exploit_dropped"))
-                TriggerEvent('qb-log:server:CreateLog', 'anticheat', 'Anti-Cheat', 'white', ('%s Has Been Dropped For Character Joining Exploit'):format(GetPlayerName(source)), false)
-            end
-        else
-            QBCore.Player.CheckPlayerData(source, newData)
-        end
-        return true
-    else
-        QBCore.ShowError(GetCurrentResourceName(), 'ERROR QBCORE.PLAYER.LOGIN - NO SOURCE GIVEN!')
+    if not source or source == '' then
+        DebugPrint('^1ERROR: QBCORE.PLAYER.LOGIN - NO SOURCE GIVEN!')
         return false
     end
-end
-
-function QBCore.Player.GetOfflinePlayer(citizenid)
     if citizenid then
+        local license = GetPlayerIdentifierByType(source --[[@as string]], 'steam')
         local PlayerData = FetchPlayerEntity(citizenid)
-        if PlayerData then
-            return QBCore.Player.CheckPlayerData(nil, PlayerData)
+        if PlayerData and license == PlayerData.license then
+            QBCore.Player.CheckPlayerData(source, PlayerData)
+        else
+            DropPlayer(tostring(source), Lang:t("info.exploit_dropped"))
+            TriggerEvent('qb-log:server:CreateLog', 'anticheat', 'Anti-Cheat', 'white', ('%s Has Been Dropped For Character Joining Exploit'):format(GetPlayerName(source)), false)
         end
+    else
+        QBCore.Player.CheckPlayerData(source, newData)
     end
-    return nil
+    return true
 end
 
+---@param citizenid string
+---@return Player? player if found in storage
+function QBCore.Player.GetOfflinePlayer(citizenid)
+    if not citizenid then return end
+    local PlayerData = FetchPlayerEntity(citizenid)
+    if not PlayerData then return end
+    return QBCore.Player.CheckPlayerData(nil, PlayerData)
+end
+
+---@param source? integer if player is online
+---@param PlayerData PlayerEntity|PlayerData
+---@return Player? player if offline
 function QBCore.Player.CheckPlayerData(source, PlayerData)
     PlayerData = PlayerData or {}
     local Offline = true
     if source then
         PlayerData.source = source
-        PlayerData.license = PlayerData.license or QBCore.Functions.GetIdentifier(source, 'steam')
+        PlayerData.license = PlayerData.license or GetPlayerIdentifierByType(source --[[@as string]], 'steam')
         PlayerData.name = GetPlayerName(source)
         Offline = false
     end
@@ -142,11 +156,11 @@ function QBCore.Player.CheckPlayerData(source, PlayerData)
     -- Other
     PlayerData.position = PlayerData.position or QBConfig.DefaultSpawn
     PlayerData.items = GetResourceState('qb-inventory') ~= 'missing' and exports['qb-inventory']:LoadInventory(PlayerData.source, PlayerData.citizenid) or {}
-    return QBCore.Player.CreatePlayer(PlayerData, Offline)
+    return QBCore.Player.CreatePlayer(PlayerData --[[@as PlayerData]], Offline)
 end
 
--- On player logout
-
+---On player logout
+---@param source Source
 function QBCore.Player.Logout(source)
     TriggerClientEvent('QBCore:Client:OnPlayerUnload', source)
     TriggerEvent('QBCore:Server:OnPlayerUnload', source)
@@ -171,10 +185,37 @@ function QBCore.Player.Logout(source)
     GlobalState.PlayerCount -= 1
 end
 
--- Create a new character
--- Don't touch any of this unless you know what you are doing
--- Will cause major issues!
+---@class Player
+---@field Functions PlayerFunctions
+---@field PlayerData PlayerData
+---@field Offline boolean
 
+---@class PlayerFunctions
+---@field UpdatePlayerData fun()
+---@field SetJob fun(job: string, grade: integer): boolean
+---@field SetGang fun(gang: string, grade: integer): boolean
+---@field SetJobDuty fun(onDuty: boolean)
+---@field SetPlayerData fun(key: string, val: any)
+---@field SetMetaData fun(meta: string, val: any)
+---@field GetMetaData fun(meta: string): any
+---@field AddJobReputation fun(amount: number)
+---@field AddMoney fun(moneytype: MoneyType, amount: number, reason?: string): boolean
+---@field RemoveMoney fun(moneytype: MoneyType, amount: number, reason?: string): boolean
+---@field SetMoney fun(moneytype: MoneyType, amount: number, reason?: string): boolean
+---@field GetMoney fun(moneytype: MoneyType): boolean | number
+---@field SetCreditCard fun(cardNumber: number)
+---@field GetCardSlot fun(cardNumber: number, cardType: 'visa' | 'mastercard' | string): number?
+---@field Save fun()
+---@field Logout fun()
+---@field AddMethod fun(methodName: string, handler: function)
+---@field AddField fun(fieldName: string, data: any)
+
+---Create a new character
+---Don't touch any of this unless you know what you are doing
+---Will cause major issues!
+---@param PlayerData PlayerData
+---@param Offline boolean
+---@return Player? player if player is offline
 function QBCore.Player.CreatePlayer(PlayerData, Offline)
     local self = {}
     self.Functions = {}
@@ -187,6 +228,9 @@ function QBCore.Player.CreatePlayer(PlayerData, Offline)
         TriggerClientEvent('QBCore:Player:SetPlayerData', self.PlayerData.source, self.PlayerData)
     end
 
+    ---@param job string name
+    ---@param grade integer
+    ---@return boolean success if job was set
     function self.Functions.SetJob(job, grade)
         job = job or ''
         grade = tonumber(grade) or 0
@@ -219,6 +263,9 @@ function QBCore.Player.CreatePlayer(PlayerData, Offline)
         return true
     end
 
+    ---@param gang string name
+    ---@param grade integer
+    ---@return boolean success if gang was set
     function self.Functions.SetGang(gang, grade)
         gang = gang or ''
         grade = tonumber(grade) or 0
@@ -247,17 +294,22 @@ function QBCore.Player.CreatePlayer(PlayerData, Offline)
         return true
     end
 
+    ---@param onDuty boolean
     function self.Functions.SetJobDuty(onDuty)
         self.PlayerData.job.onduty = not not onDuty -- Make sure the value is a boolean if nil is sent
         self.Functions.UpdatePlayerData()
     end
 
+    ---@param key string
+    ---@param val any
     function self.Functions.SetPlayerData(key, val)
         if not key or type(key) ~= 'string' then return end
         self.PlayerData[key] = val
         self.Functions.UpdatePlayerData()
     end
 
+    ---@param meta string
+    ---@param val any
     function self.Functions.SetMetaData(meta, val)
         if not meta or type(meta) ~= 'string' then return end
         if meta == 'hunger' or meta == 'thirst' then
@@ -267,22 +319,29 @@ function QBCore.Player.CreatePlayer(PlayerData, Offline)
         self.Functions.UpdatePlayerData()
     end
 
+    ---@param meta string
+    ---@return any
     function self.Functions.GetMetaData(meta)
         if not meta or type(meta) ~= 'string' then return end
         return self.PlayerData.metadata[meta]
     end
 
+    ---@param amount number
     function self.Functions.AddJobReputation(amount)
         if not amount then return end
-        amount = tonumber(amount)
+        amount = tonumber(amount) --[[@as number]]
         self.PlayerData.metadata.jobrep[self.PlayerData.job.name] = self.PlayerData.metadata.jobrep[self.PlayerData.job.name] + amount
         self.Functions.UpdatePlayerData()
     end
 
+    ---@param moneytype MoneyType
+    ---@param amount number
+    ---@param reason? string
+    ---@return boolean success if money was added
     function self.Functions.AddMoney(moneytype, amount, reason)
         reason = reason or 'unknown'
-        amount = tonumber(amount)
-        if amount < 0 then return end
+        amount = tonumber(amount) --[[@as number]]
+        if amount < 0 then return false end
         if not self.PlayerData.money[moneytype] then return false end
         self.PlayerData.money[moneytype] = self.PlayerData.money[moneytype] + amount
 
@@ -301,10 +360,14 @@ function QBCore.Player.CreatePlayer(PlayerData, Offline)
         return true
     end
 
+    ---@param moneytype MoneyType
+    ---@param amount number
+    ---@param reason? string
+    ---@return boolean success if money was removed
     function self.Functions.RemoveMoney(moneytype, amount, reason)
         reason = reason or 'unknown'
-        amount = tonumber(amount)
-        if amount < 0 then return end
+        amount = tonumber(amount) --[[@as number]]
+        if amount < 0 then return false end
         if not self.PlayerData.money[moneytype] then return false end
         for _, mtype in pairs(QBCore.Config.Money.DontAllowMinus) do
             if mtype == moneytype then
@@ -333,9 +396,13 @@ function QBCore.Player.CreatePlayer(PlayerData, Offline)
         return true
     end
 
+    ---@param moneytype MoneyType
+    ---@param amount number
+    ---@param reason? string
+    ---@return boolean success if money was set
     function self.Functions.SetMoney(moneytype, amount, reason)
         reason = reason or 'unknown'
-        amount = tonumber(amount)
+        amount = tonumber(amount) --[[@as number]]
         if amount < 0 then return false end
         if not self.PlayerData.money[moneytype] then return false end
         local difference = amount - self.PlayerData.money[moneytype]
@@ -352,16 +419,22 @@ function QBCore.Player.CreatePlayer(PlayerData, Offline)
         return true
     end
 
+    ---@param moneytype MoneyType
+    ---@return boolean | number amount or false if moneytype does not exist
     function self.Functions.GetMoney(moneytype)
         if not moneytype then return false end
         return self.PlayerData.money[moneytype]
     end
 
+    ---@param cardNumber number
     function self.Functions.SetCreditCard(cardNumber)
         self.PlayerData.charinfo.card = cardNumber
         self.Functions.UpdatePlayerData()
     end
 
+    ---@param cardNumber number
+    ---@param cardType 'visa' | 'mastercard' | string
+    ---@return number? slot of the card if found
     function self.Functions.GetCardSlot(cardNumber, cardType)
         local item = tostring(cardType)
         local slots = exports['qb-inventory']:GetSlotsByItem(self.PlayerData.items, item)
@@ -388,10 +461,17 @@ function QBCore.Player.CreatePlayer(PlayerData, Offline)
         QBCore.Player.Logout(self.PlayerData.source)
     end
 
+    ---adds a new player method at runtime
+    ---@param methodName string
+    ---@param handler function
     function self.Functions.AddMethod(methodName, handler)
         self.Functions[methodName] = handler
     end
 
+    ---adds a new player field at runtime
+    ---note this probably isn't what you want. If data should be persistent, see self.Functions.SetMetaData instead.
+    ---@param fieldName string
+    ---@param data any
     function self.Functions.AddField(fieldName, data)
         self[fieldName] = data
     end
@@ -409,16 +489,18 @@ function QBCore.Player.CreatePlayer(PlayerData, Offline)
     end
 end
 
--- Add a new function to the Functions table of the player class
--- Use-case:
---[[
-    AddEventHandler('QBCore:Server:PlayerLoaded', function(Player)
-        QBCore.Functions.AddPlayerMethod(Player.PlayerData.source, "functionName", function(oneArg, orMore)
-            -- do something here
-        end)
-    end)
-]]
-
+---Add a new function to the Functions table of the player class
+---Use-case:
+-- [[
+--     AddEventHandler('QBCore:Server:PlayerLoaded', function(Player)
+--         QBCore.Functions.AddPlayerMethod(Player.PlayerData.source, "functionName", function(oneArg, orMore)
+--             -- do something here
+--         end)
+--     end)
+-- ]]
+---@param ids number|number[] which players to add the method to. -1 for all players
+---@param methodName string
+---@param handler function
 function QBCore.Functions.AddPlayerMethod(ids, methodName, handler)
     local idType = type(ids)
     if idType == "number" then
@@ -438,14 +520,16 @@ function QBCore.Functions.AddPlayerMethod(ids, methodName, handler)
     end
 end
 
--- Add a new field table of the player class
--- Use-case:
+---Add a new field table of the player class
+---Use-case:
 --[[
     AddEventHandler('QBCore:Server:PlayerLoaded', function(Player)
         QBCore.Functions.AddPlayerField(Player.PlayerData.source, "fieldName", "fieldData")
     end)
 ]]
-
+---@param ids number|number[] which players to add a new field to. -1 for all players
+---@param fieldName string
+---@param data any
 function QBCore.Functions.AddPlayerField(ids, fieldName, data)
     local idType = type(ids)
     if idType == "number" then
@@ -465,45 +549,48 @@ function QBCore.Functions.AddPlayerField(ids, fieldName, data)
     end
 end
 
--- Save player info to database (make sure citizenid is the primary key in your database)
-
+---Save player info to database (make sure citizenid is the primary key in your database)
+---@param source Source
 function QBCore.Player.Save(source)
     local ped = GetPlayerPed(source)
     local pcoords = GetEntityCoords(ped)
     local PlayerData = QBCore.Players[source].PlayerData
-    if PlayerData then
-        CreateThread(function()
-            UpsertPlayerEntity({
-                playerEntity = PlayerData,
-                position = pcoords,
-            })
-        end)
-        if GetResourceState('qb-inventory') ~= 'missing' then exports['qb-inventory']:SaveInventory(source) end
-        QBCore.ShowSuccess(GetCurrentResourceName(), PlayerData.name .. ' PLAYER SAVED!')
-    else
-        QBCore.ShowError(GetCurrentResourceName(), 'ERROR QBCORE.PLAYER.SAVE - PLAYERDATA IS EMPTY!')
+    if not PlayerData then
+        DebugPrint('^1ERROR: QBCORE.PLAYER.SAVE - PLAYERDATA IS EMPTY!')
+        return
     end
+
+    CreateThread(function()
+        UpsertPlayerEntity({
+            playerEntity = PlayerData,
+            position = pcoords,
+        })
+    end)
+    if GetResourceState('qb-inventory') ~= 'missing' then exports['qb-inventory']:SaveInventory(source) end
+    DebugPrint(('^2%s PLAYER SAVED!'):format(PlayerData.name))
 end
 
+---@param PlayerData PlayerEntity
 function QBCore.Player.SaveOffline(PlayerData)
-    if PlayerData then
-        CreateThread(function()
-            UpsertPlayerEntity({
-                playerEntity = PlayerData,
-                position = PlayerData.position
-            })
-        end)
-        if GetResourceState('qb-inventory') ~= 'missing' then exports['qb-inventory']:SaveInventory(PlayerData, true) end
-        QBCore.ShowSuccess(GetCurrentResourceName(), PlayerData.name .. ' OFFLINE PLAYER SAVED!')
-    else
-        QBCore.ShowError(GetCurrentResourceName(), 'ERROR QBCORE.PLAYER.SAVEOFFLINE - PLAYERDATA IS EMPTY!')
+    if not PlayerData then
+        DebugPrint('^1ERROR: QBCORE.PLAYER.SAVEOFFLINE - PLAYERDATA IS EMPTY!')
+        return
     end
+
+    CreateThread(function()
+        UpsertPlayerEntity({
+            playerEntity = PlayerData,
+            position = PlayerData.position.xyz
+        })
+    end)
+    if GetResourceState('qb-inventory') ~= 'missing' then exports['qb-inventory']:SaveInventory(PlayerData, true) end
+    DebugPrint(('^2%s OFFLINE PLAYER SAVED!'):format(PlayerData.name))
 end
 
--- Delete character
-
+---@param source Source
+---@param citizenid string
 function QBCore.Player.DeleteCharacter(source, citizenid)
-    local license = QBCore.Functions.GetIdentifier(source, 'steam')
+    local license = GetPlayerIdentifierByType(source --[[@as string]], 'steam')
     local result = FetchPlayerEntity(citizenid).license
     if license == result then
         CreateThread(function()
@@ -513,17 +600,18 @@ function QBCore.Player.DeleteCharacter(source, citizenid)
             end
         end)
     else
-        DropPlayer(source, Lang:t("info.exploit_dropped"))
+        DropPlayer(tostring(source), Lang:t("info.exploit_dropped"))
         TriggerEvent('qb-log:server:CreateLog', 'anticheat', 'Anti-Cheat', 'white', GetPlayerName(source) .. ' Has Been Dropped For Character Deletion Exploit', true)
     end
 end
 
+---@param citizenid string
 function QBCore.Player.ForceDeleteCharacter(citizenid)
     local result = FetchPlayerEntity(citizenid).license
     if result then
         local Player = QBCore.Functions.GetPlayerByCitizenId(citizenid)
         if Player then
-            DropPlayer(Player.PlayerData.source, "An admin deleted the character which you are currently using")
+            DropPlayer(Player.PlayerData.source --[[@as string]], "An admin deleted the character which you are currently using")
         end
 
         CreateThread(function()
@@ -535,28 +623,38 @@ function QBCore.Player.ForceDeleteCharacter(citizenid)
     end
 end
 
--- Inventory Backwards Compatibility
+--- Inventory Backwards Compatibility
 
+---@param source Source
 function QBCore.Player.SaveInventory(source)
     if GetResourceState('qb-inventory') == 'missing' then return end
     exports['qb-inventory']:SaveInventory(source, false)
 end
 
+---@param PlayerData PlayerData
 function QBCore.Player.SaveOfflineInventory(PlayerData)
     if GetResourceState('qb-inventory') == 'missing' then return end
     exports['qb-inventory']:SaveInventory(PlayerData, true)
 end
 
+---@param items any[]
+---@return number?
 function QBCore.Player.GetTotalWeight(items)
     if GetResourceState('qb-inventory') == 'missing' then return end
     return exports['qb-inventory']:GetTotalWeight(items)
 end
 
+---@param items any[]
+---@param itemName string
+---@return integer[]? slots
 function QBCore.Player.GetSlotsByItem(items, itemName)
     if GetResourceState('qb-inventory') == 'missing' then return end
     return exports['qb-inventory']:GetSlotsByItem(items, itemName)
 end
 
+---@param items any[]
+---@param itemName string
+---@return integer? slot
 function QBCore.Player.GetFirstSlotByItem(items, itemName)
     if GetResourceState('qb-inventory') == 'missing' then return end
     return exports['qb-inventory']:GetFirstSlotByItem(items, itemName)
