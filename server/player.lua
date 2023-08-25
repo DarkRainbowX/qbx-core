@@ -297,6 +297,8 @@ function QBCore.Player.CreatePlayer(PlayerData, Offline)
     ---@param onDuty boolean
     function self.Functions.SetJobDuty(onDuty)
         self.PlayerData.job.onduty = not not onDuty -- Make sure the value is a boolean if nil is sent
+        TriggerEvent('QBCore:Server:SetDuty', self.PlayerData.source, self.PlayerData.job.onduty)
+        TriggerClientEvent('QBCore:Client:SetDuty', self.PlayerData.source, self.PlayerData.job.onduty)
         self.Functions.UpdatePlayerData()
     end
 
@@ -559,6 +561,9 @@ function QBCore.Player.Save(source)
         DebugPrint('^1ERROR: QBCORE.PLAYER.SAVE - PLAYERDATA IS EMPTY!')
         return
     end
+
+    PlayerData.metadata.health = GetEntityHealth(ped)
+    PlayerData.metadata.armor = GetPedArmour(ped)
 
     CreateThread(function()
         UpsertPlayerEntity({

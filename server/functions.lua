@@ -9,7 +9,7 @@ QBCore.UsableItems = {}
 -- ex: local example = player.Functions.functionname(parameter)
 
 ---@deprecated
-QBCore.Functions.GetCoords = GetCoords
+QBCore.Functions.GetCoords = GetCoordsFromEntity
 
 ---@alias Identifier 'steam'|'license'|'license2'|'xbl'|'ip'|'discord'|'live'
 
@@ -183,7 +183,6 @@ end
 
 ---@deprecated Use QBCore.Functions.CreateVehicle instead.
 function QBCore.Functions.SpawnVehicle(source, model, coords, warp)
-    print(string.format("%s invoked deprecated server function QBCore.Functions.SpawnVehicle. Use QBCore.Functions.CreateVehicle instead.", GetInvokingResource()))
     return SpawnVehicle(source, model, coords, warp)
 end
 
@@ -195,7 +194,6 @@ QBCore.Functions.CreateVehicle = SpawnVehicle
 -- Client Callback
 ---@deprecated use https://overextended.github.io/docs/ox_lib/Callback/Lua/Server instead
 function QBCore.Functions.TriggerClientCallback(name, source, cb, ...)
-    print(string.format("%s invoked deprecated function TriggerClientCallback. Use ox_lib callback functions instead.", GetInvokingResource()))
     QBCore.ClientCallbacks[name] = cb
     TriggerClientEvent('QBCore:Client:TriggerClientCallback', source, name, ...)
 end
@@ -203,13 +201,11 @@ end
 -- Server Callback
 ---@deprecated use https://overextended.github.io/docs/ox_lib/Callback/Lua/Server instead
 function QBCore.Functions.CreateCallback(name, cb)
-    print(string.format("%s invoked deprecated function CreateCallback. Use ox_lib callback functions instead.", GetInvokingResource()))
     QBCore.ServerCallbacks[name] = cb
 end
 
 ---@deprecated call a function instead
 function QBCore.Functions.TriggerCallback(name, source, cb, ...)
-    print(string.format("%s invoked deprecated function TriggerCallback. Call a function instead.", GetInvokingResource()))
     if not QBCore.ServerCallbacks[name] then return end
     QBCore.ServerCallbacks[name](source, cb, ...)
 end
@@ -371,15 +367,29 @@ function QBCore.Functions.HasItem(source, items, amount)
     return exports['qb-inventory']:HasItem(source, items, amount)
 end
 
----@see client/functions.lua:QBCore.Functions.NotifyV2
-function QBCore.Functions.NotifyV2(source, props)
-    TriggerClientEvent('QBCore:NotifyV2', source, props)
-end
-
----@deprecated use QBCore.Functions.NotifyV2 instead.
 ---@see client/functions.lua:QBCore.Functions.Notify
-function QBCore.Functions.Notify(source, text, notifyType, duration)
-    TriggerClientEvent('QBCore:Notify', source, text, notifyType, duration)
+function QBCore.Functions.Notify(source, text, notifyType, duration, subTitle, notifyPosition, notifyStyle, notifyIcon, notifyIconColor)
+    local title, description
+    if type(text) == "table" then
+        title = text.text or 'Placeholder'
+        description = text.caption or nil
+    else
+        title = text
+        description = subTitle
+    end
+    local position = notifyPosition or QBConfig.NotifyPosition
+
+    TriggerClientEvent('ox_lib:notify', source, {
+        id = title,
+        title = title,
+        description = description,
+        duration = duration,
+        type = notifyType,
+        position = position,
+        style = notifyStyle,
+        icon = notifyIcon,
+        iconColor = notifyIconColor
+    })
 end
 
 ---@deprecated use GetPlate from imports/utils.lua

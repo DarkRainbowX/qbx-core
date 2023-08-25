@@ -2,7 +2,6 @@
 QBCore.Commands = {}
 
 function QBCore.Commands.Add(name, help, arguments, argsrequired, callback, permission)
-    print(string.format("/!\\ Not an Error /!\\ | %s invoked deprecated Commands function. Please use Ox_lib's addCommand instead.", GetInvokingResource()))
     local properties = {
         help = help,
         restricted = permission and permission ~= "user" and 'group.'..permission or false,
@@ -24,6 +23,11 @@ function QBCore.Commands.Add(name, help, arguments, argsrequired, callback, perm
         end
         callback(source, _args, raw)
     end)
+end
+
+---@deprecated
+function QBCore.Commands.Refresh(source)
+
 end
 
 -- Teleport

@@ -43,11 +43,7 @@ end)
 RegisterNetEvent('QBCore:Command:GoToMarker', function()
     local blipMarker <const> = GetFirstBlipInfoId(8)
     if not DoesBlipExist(blipMarker) then
-        QBCore.Functions.NotifyV2({
-            description = Lang:t("error.no_waypoint"),
-            type = 'error',
-            duration = 5000,
-        })
+        QBCore.Functions.Notify(Lang:t("error.no_waypoint"), 'error')
         return 'marker'
     end
 
@@ -118,20 +114,12 @@ RegisterNetEvent('QBCore:Command:GoToMarker', function()
         -- If we can't find the coords, set the coords to the old ones.
         -- We don't unpack them before since they aren't in a loop and only called once.
         SetPedCoordsKeepVehicle(ped, oldCoords.x, oldCoords.y, oldCoords.z - 1.0)
-        QBCore.Functions.NotifyV2({
-            description = Lang:t("error.tp_error"),
-            type = 'error',
-            duration = 5000,
-        })
+        QBCore.Functions.Notify(Lang:t("error.tp_error"), 'error')
     end
 
     -- If Z coord was found, set coords in found coords.
     SetPedCoordsKeepVehicle(ped, x, y, groundZ)
-    QBCore.Functions.NotifyV2({
-        description = Lang:t("success.teleported_waypoint"),
-        type = 'success',
-        duration = 5000,
-    })
+    QBCore.Functions.Notify(Lang:t("success.teleported_waypoint"), 'success')
 end)
 
 -- Vehicle Commands
@@ -180,15 +168,9 @@ RegisterNetEvent('QBCore:Player:SetPlayerData', function(val)
     QBCore.PlayerData = val
 end)
 
----@see client/functions.lua:QBCore.Functions.NotifyV2
-RegisterNetEvent('QBCore:NotifyV2', function(props)
-    QBCore.Functions.NotifyV2(props)
-end)
-
----@deprecated Use event 'QBCore:NotifyV2' instead.
 ---@see client/functions.lua:QBCore.Functions.Notify
-RegisterNetEvent('QBCore:Notify', function(text, notifyType, duration)
-    QBCore.Functions.Notify(text, notifyType, duration)
+RegisterNetEvent('QBCore:Notify', function(text, notifyType, duration, subTitle, notifyPosition, notifyStyle, notifyIcon, notifyIconColor)
+    QBCore.Functions.Notify(text, notifyType, duration, subTitle, notifyPosition, notifyStyle, notifyIcon, notifyIconColor)
 end)
 
 -- Callback Events --
@@ -196,7 +178,6 @@ end)
 -- Client Callback
 ---@deprecated call a function instead
 RegisterNetEvent('QBCore:Client:TriggerClientCallback', function(name, ...)
-    print(string.format("%s invoked deprecated event QBCore:Client:TriggerClientCallback. Call a function instead", GetInvokingResource()))
     QBCore.Functions.TriggerClientCallback(name, function(...)
         TriggerServerEvent('QBCore:Server:TriggerClientCallback', name, ...)
     end, ...)
@@ -205,7 +186,6 @@ end)
 -- Server Callback
 ---@deprecated use https://overextended.github.io/docs/ox_lib/Callback/Lua/Client/ instead
 RegisterNetEvent('QBCore:Client:TriggerCallback', function(name, ...)
-    print(string.format("%s invoked deprecated event QBCore:Client:TriggerCallback. Use ox_lib callback functions instead.", GetInvokingResource()))
     if QBCore.ServerCallbacks[name] then
         QBCore.ServerCallbacks[name](...)
         QBCore.ServerCallbacks[name] = nil

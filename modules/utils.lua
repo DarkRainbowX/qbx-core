@@ -148,7 +148,7 @@ function GenerateRandomPlate(pattern)
             local last = i == #pattern
             local c = pattern:sub(i, i)
             local nextC = last and '\0' or pattern:sub(i + 1, i + 1)
-            local curC = ''
+            local curC
 
             if c == '1' then
                 curC = RandomNumber(1)
@@ -360,8 +360,8 @@ else
         font = font or 4
 
         SetTextScale(scale, scale)
-        SetTextFont(4)
-        SetTextColour(255, 255, 255, 215)
+        SetTextFont(font)
+        SetTextColour(r, g, b, a)
         BeginTextCommandDisplayText('STRING')
         SetTextCentre(true)
         AddTextComponentSubstringPlayerName(text)
@@ -889,17 +889,26 @@ else
         return coords
     end
 
+        ---Clear all vehicle extras
+    ---@param vehicle integer
+    local function ClearAllVehicleExtras(vehicle)
+        for i = 1, 20 do
+            if DoesExtraExist(vehicle, i) then
+                SetVehicleExtra(vehicle, i, false)
+            end
+        end
+    end
+
     ---Set the status of an extra on the vehicle
     ---@param vehicle integer
     ---@param extra integer
     ---@param enable boolean
     function ChangeVehicleExtra(vehicle, extra, enable)
         if not DoesExtraExist(vehicle, extra) then return end
-
-        SetVehicleExtra(vehicle, extra, not enable)
         local isExtraOn = IsVehicleExtraTurnedOn(vehicle, extra)
+
         if enable ~= isExtraOn then
-            ChangeVehicleExtra(vehicle, extra, enable)
+            SetVehicleExtra(vehicle, extra, not enable)
         end
     end
 
@@ -907,13 +916,8 @@ else
     ---@param vehicle integer
     ---@param extras table<integer, boolean>
     function SetVehicleExtras(vehicle, extras)
-        -- Clear Extras
-        for i = 1, 20 do
-            if DoesExtraExist(vehicle, i) then
-                SetVehicleExtra(vehicle, i, true)
-            end
-        end
-
+        ClearAllVehicleExtras(vehicle)
+        
         for id, enabled in pairs(extras) do
             ChangeVehicleExtra(vehicle, tonumber(id) --[[@as integer]], enabled)
         end

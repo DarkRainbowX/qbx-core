@@ -11,7 +11,7 @@ function QBCore.Functions.GetPlayerData(cb)
 end
 
 ---@deprecated use GetCoordsFromEntity from imports/utils.lua
-QBCore.Functions.GetCoords = GetCoords
+QBCore.Functions.GetCoords = GetCoordsFromEntity
 
 ---@deprecated use HasItem from imports/utils.lua
 QBCore.Functions.HasItem = HasItem
@@ -36,48 +36,37 @@ QBCore.Functions.LoadModel = lib.requestModel
 ---@deprecated use lib.requestAnimSet from ox_lib
 QBCore.Functions.LoadAnimSet = lib.requestAnimSet
 
----@alias NotificationPosition 'top' | 'top-right' | 'top-left' | 'bottom' | 'bottom-right' | 'bottom-left' | 'center-right' | 'center-left'
----@alias NotificationType 'info' | 'warning' | 'success' | 'error'
----@alias DeprecatedNotificationType 'primary'
-
----@class NotifyProps
----@field id? string notifications with the same id will not be on the screen at the same time
----@field title? string displayed to the player
----@field description? string displayed to the player
----@field duration? number milliseconds notification is on screen
----@field position? NotificationPosition
----@field type? NotificationType
----@field style? { [string]: any }
----@field icon? string https://fontawesome.com icon name
----@field iconColor? string css color value for the icon
-
 ---Text box popup for player which dissappears after a set time.
----@param props NotifyProps
-function QBCore.Functions.NotifyV2(props)
-    if not props.position then
-        props.position = QBConfig.NotifyPosition
-    end
-    lib.notify(props)
-end
-
----Text box popup for player which dissappears after a set time.
----@deprecated use QBCore.Functions.NotifyV2
 ---@param text table|string text of the notification
----@param notifyType? NotificationType|DeprecatedNotificationType informs default styling. Defaults to 'inform'.
----@param duration? integer milliseconds notification will remain on scren. Defaults to 5000.
-function QBCore.Functions.Notify(text, notifyType, duration)
-    print(string.format("%s invoked deprecated function Notify. Use NotifyV2 instead.", GetInvokingResource()))
-    notifyType = notifyType or 'info'
-    if notifyType == 'primary' then notifyType = 'info' end
-    duration = duration or 5000
-    local position = QBConfig.NotifyPosition
+---@param notifyType? NotificationType informs default styling. Defaults to 'inform'
+---@param duration? integer milliseconds notification will remain on screen. Defaults to 5000
+---@param subTitle? string extra text under the title
+---@param notifyPosition? NotificationPosition
+---@param notifyStyle? table Custom styling. Please refer too https://overextended.dev/ox_lib/Modules/Interface/Client/notify#libnotify
+---@param notifyIcon? string Font Awesome 6 icon name
+---@param notifyIconColor? string Custom color for the icon chosen before
+function QBCore.Functions.Notify(text, notifyType, duration, subTitle, notifyPosition, notifyStyle, notifyIcon, notifyIconColor)
+    local title, description
     if type(text) == "table" then
-        local title = text.text or 'Placeholder'
-        local description = text.caption or 'Placeholder'
-        lib.notify({ title = title, description = description, duration = duration, type = notifyType --[[@as NotificationType]], position = position})
+        title = text.text or 'Placeholder'
+        description = text.caption or nil
     else
-        lib.notify({ description = text, duration = duration, type = notifyType --[[@as NotificationType]], position = position})
+        title = text
+        description = subTitle
     end
+    local position = notifyPosition or QBConfig.NotifyPosition
+
+    lib.notify({
+        id = title,
+        title = title,
+        description = description,
+        duration = duration,
+        type = notifyType,
+        position = position,
+        style = notifyStyle,
+        icon = notifyIcon,
+        iconColor = notifyIconColor
+    })
 end
 
 ---@deprecated use DebugPrint from imports/utils.lua
@@ -93,13 +82,11 @@ end
 -- Client Callback
 ---@deprecated use https://overextended.github.io/docs/ox_lib/Callback/Lua/Client/ instead
 function QBCore.Functions.CreateClientCallback(name, cb)
-    print(string.format("%s invoked deprecated function CreateClientCallback. Use ox_lib callback functions instead.", GetInvokingResource()))
     QBCore.ClientCallbacks[name] = cb
 end
 
 ---@deprecated call a function instead
 function QBCore.Functions.TriggerClientCallback(name, cb, ...)
-    print(string.format("%s invoked deprecated function TriggerClientCallback. Use ox_lib callback functions instead.", GetInvokingResource()))
     if not QBCore.ClientCallbacks[name] then return end
     QBCore.ClientCallbacks[name](cb, ...)
 end
@@ -107,7 +94,6 @@ end
 -- Server Callback
 ---@deprecated use https://overextended.github.io/docs/ox_lib/Callback/Lua/Client/ instead
 function QBCore.Functions.TriggerCallback(name, cb, ...)
-    print(string.format("%s invoked deprecated function TriggerCallback. Use ox_lib callback functions instead.", GetInvokingResource()))
     QBCore.ServerCallbacks[name] = cb
     TriggerServerEvent('QBCore:Server:TriggerCallback', name, ...)
 end
@@ -206,8 +192,7 @@ QBCore.Functions.AttachProp = AttachProp
 ---@param isnetworked? boolean defaults to true
 ---@param teleportInto boolean teleport player to driver seat if true
 function QBCore.Functions.SpawnVehicle(model, cb, coords, isnetworked, teleportInto)
-    print(string.format("%s invoked deprecated client function QBCore.Functions.SpawnVehicle. call server function QBCore.Functions.CreateVehicle instead.", GetInvokingResource()))
-    coords = type(coords) == 'table' and vec4(coords.x, coords.y, coords.z, coords.w or GetEntityHeading(cache.ped)) or coords or GetCoords(cache.ped)
+    coords = type(coords) == 'table' and vec4(coords.x, coords.y, coords.z, coords.w or GetEntityHeading(cache.ped)) or coords or GetCoordsFromEntity(cache.ped)
     model = type(model) == 'string' and joaat(model) or model
     if not IsModelInCdimage(model) then return end
 
