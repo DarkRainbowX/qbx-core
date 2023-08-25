@@ -1,3 +1,8 @@
+Citizen.CreateThread(function()
+    RegisterFontFile('out')                        -- the name of your .gfx, without .gfx
+    fontId = RegisterFontId('Montserrat-SemiBold') -- the name from the .xml
+end)
+
 -- Player load and unload handling
 RegisterNetEvent('QBCore:Client:OnPlayerLoaded', function()
     ShutdownLoadingScreenNui()
