@@ -597,7 +597,7 @@ else
     ---@return number? closestDistance
     function GetClosestPlayer(coords, maxDistance)
         coords = type(coords) == 'table' and vec3(coords.x, coords.y, coords.z) or coords or GetEntityCoords(cache.ped)
-        local playerId, _, playerCoords = lib.getClosestPlayer(coords, maxDistance or 50, false)
+        local playerId, _, playerCoords = lib.getClosestPlayer(coords, maxDistance or 50, true)
         local closestDistance = playerCoords and #(playerCoords - coords) or nil
         return playerId, closestDistance
     end
