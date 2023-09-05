@@ -15,6 +15,113 @@ QBShared.VehicleHashes = {}
 ---@type table<string, Vehicle>
 QBShared.Vehicles = {
     --- Mod
+	Yama20g1_Level1 = {
+        name = 'Yama 20 Level 1',
+        braces = 'GTFutu',
+        model = 'Yama20g1_Level1',
+        price = 1,
+        category = 'motorcycles',
+        hash = `Yama20g1_Level1`,
+
+    },
+    Yama20g1_Level2 = {
+        name = 'Yama 20 Level 2',
+        braces = 'GTFutu',
+        model = 'Yama20g1_Level2',
+        price = 1,
+        category = 'motorcycles',
+        hash = `Yama20g1_Level2`,
+
+    },
+    Ducag4sp_Level1 = {
+        name = 'Ducag Level 1',
+        braces = 'GTFutu',
+        model = 'Ducag4sp_Level1',
+        price = 1,
+        category = 'motorcycles',
+        hash = `Ducag4sp_Level1`,
+
+    },
+    Ducag4sp_Level2 = {
+        name = 'Ducag Level 2',
+        braces = 'GTFutu',
+        model = 'Ducag4sp_Level2',
+        price = 1,
+        category = 'motorcycles',
+        hash = `Ducag4sp_Level2`,
+
+    },
+    Cp500g_Level1 = {
+        name = 'CP500 Level 1',
+        braces = 'GTFutu',
+        model = 'Cp500g_Level1',
+        price = 1,
+        category = 'motorcycles',
+        hash = `Cp500g_Level1`,
+
+    },
+    Cp500g_Level2 = {
+        name = 'CP500 Level 1',
+        braces = 'GTFutu',
+        model = 'Cp500g_Level2',
+        price = 1,
+        category = 'motorcycles',
+        hash = `Cp500g_Level2`,
+
+    },
+    CAD5T_LEVEL1 = {
+        name = 'Cad5T Level 1',
+        braces = 'GTFutu',
+        model = 'CAD5T_LEVEL1',
+        price = 1,
+        category = 'sedans',
+        categoryLabel = 'Sedans',
+        hash = `CAD5T_LEVEL1`,
+
+    },
+    CAD5T_LEVEL2 = {
+        name = 'Cad5T Level 2',
+        braces = 'GTFutu',
+        model = 'CAD5T_LEVEL2',
+        price = 1,
+        category = 'sedans',
+        categoryLabel = 'Sedans',
+        hash = `CAD5T_LEVEL2`,
+    },
+    SSC20_Level1 = {
+        name = '20SSC Level 1',
+        braces = 'GTFutu',
+        model = '20SSC_Level1',
+        price = 1,
+        category = 'sedans',
+        categoryLabel = 'Sedans',
+        hash = `20SSC_Level1`,
+    },
+    SSC20_Level2 = {
+        name = '20SSC Level 2',
+        braces = 'GTFutu',
+        model = '20SSC_Level2',
+        price = 1,
+        category = 'sedans',
+        categoryLabel = 'Sedans',
+        hash = `20SSC_Level2`,
+    },
+    Umerus_Level1 = {
+        name = 'Umerus Level 1',
+        braces = 'GTFutu',
+        model = 'Umerus_Level1',
+        price = 1,
+        category = 'suvs',
+        hash = `Umerus_Level1`,
+    },
+    Umerus_Level2 = {
+        name = 'Umerus Level 2',
+        braces = 'GTFutu',
+        model = 'Umerus_Level2',
+        price = 1,
+        category = 'suvs',
+        hash = `Umerus_Level2`,
+    },
     yzf20r1 = {
         name = '2020 Yamaha YZF-R1',
         brand = 'Yamaha',
@@ -59,7 +166,7 @@ QBShared.Vehicles = {
         name = '2058 Quadra Turbo-R V-Tech',
         brand = 'Quadra',
         model = 'rmodquadra',
-        price = 9999999999,
+        price = 19,
         category = 'super',
         hash = `rmodquadra`,
     },
@@ -751,7 +858,7 @@ QBShared.Vehicles = {
 		name = 'Oppressor',
 		brand = 'Pegassi',
 		model = 'oppressor',
-		price = 9999999,
+		price = 19,
 		category = 'super',
 		hash = `oppressor`,
 	},
