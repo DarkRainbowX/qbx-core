@@ -10,7 +10,7 @@ QBConfig.Money = {}
 ---@alias MoneyType 'cash' | 'bank' | 'crypto'
 ---@alias Money {cash: number, bank: number, crypto: number}
 ---@type Money
-QBConfig.Money.MoneyTypes = { cash = 500, bank = 500, crypto = 0 } -- type = startamount - Add or remove money types for your server (for ex. blackmoney = 0), remember once added it will not be removed from the database!
+QBConfig.Money.MoneyTypes = { cash = 1000, bank = 1000, crypto = 0 } -- type = startamount - Add or remove money types for your server (for ex. blackmoney = 0), remember once added it will not be removed from the database!
 
 QBConfig.Money.DontAllowMinus = { 'cash', 'crypto', 'bank' } -- Money that is not allowed going in minus
 QBConfig.Money.PaycheckTimeout = 48 -- The time in minutes that it will give the paycheck

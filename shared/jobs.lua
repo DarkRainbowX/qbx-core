@@ -353,4 +353,41 @@ QBShared.Jobs = {
             },
         },
 	},
+
+    ['streetart'] = {
+		label = 'StreetArt',
+		defaultDuty = true,
+		offDutyPay = false,
+		grades = {
+            ['0'] = {
+                name = 'StreetArt',
+                payment = 0
+            },
+        },
+	},
+
+    ['mining'] = {
+		label = 'Mining',
+		defaultDuty = true,
+		offDutyPay = false,
+		grades = {
+            ['0'] = {
+                name = 'Mining',
+                payment = 0
+            },
+        },
+	},
+
+
+    ['racecreator'] = {
+		label = 'RaceReator',
+		defaultDuty = true,
+		offDutyPay = false,
+		grades = {
+            ['0'] = {
+                name = 'RaceReator',
+                payment = 0
+            },
+        },
+	},
 }
