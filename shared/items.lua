@@ -1,5 +1,4 @@
-QBShared = QBShared or {}
-QBShared.Items = {
+return {
 	-- WEAPONS
 	-- Melee
 	['weapon_unarmed'] 				 = {['name'] = 'weapon_unarmed', 		 	  	['label'] = 'Fists', 					['weight'] = 1000, 		['type'] = 'weapon',	['ammotype'] = nil, 					['image'] = 'placeholder.png', 			['unique'] = true, 		['useable'] = false, 	['description'] = 'Fisticuffs'},
@@ -279,7 +278,6 @@ QBShared.Items = {
 	['grape'] 					 	 = {['name'] = 'grape', 						['label'] = 'Grape', 					['weight'] = 100, 		['type'] = 'item', 		['image'] = 'grape.png', 				['unique'] = false, 	['useable'] = true, 	['shouldClose'] = false,   ['combinable'] = nil,   ['description'] = 'Mmmmh yummie, grapes'},
 	['wine'] 					 	 = {['name'] = 'wine', 							['label'] = 'Wine', 					['weight'] = 300, 		['type'] = 'item', 		['image'] = 'wine.png', 				['unique'] = false, 	['useable'] = true, 	['shouldClose'] = false,   ['combinable'] = nil,   ['description'] = 'Some good wine to drink on a fine evening'},
 	['grapejuice'] 					 = {['name'] = 'grapejuice', 					['label'] = 'Grape Juice', 				['weight'] = 200, 		['type'] = 'item', 		['image'] = 'grapejuice.png', 			['unique'] = false, 	['useable'] = true, 	['shouldClose'] = false,   ['combinable'] = nil,   ['description'] = 'Grape juice is said to be healthy'},
-	['stress_medicine'] 					 = {['name'] = 'stress_medicine', 					['label'] = 'Stress Medicine', 				['weight'] = 500, 		['type'] = 'item', 		['image'] = 'stress_medicine.png', 			['unique'] = false, 	['useable'] = true, 	['shouldClose'] = true,   ['combinable'] = nil,   ['description'] = 'Stress Medicine'},
 
 	-- Drugs
 	['joint'] 						 = {['name'] = 'joint', 			  	  		['label'] = 'Joint', 					['weight'] = 0, 		['type'] = 'item', 		['image'] = 'joint.png', 				['unique'] = false, 	['useable'] = true, 	['shouldClose'] = true,    ['combinable'] = nil,   ['description'] = 'Sidney would be very proud at you'},
@@ -401,8 +399,9 @@ QBShared.Items = {
 	['markedbills'] 				 = {['name'] = 'markedbills', 			  	  	['label'] = 'Marked Money', 			['weight'] = 1000, 		['type'] = 'item', 		['image'] = 'markedbills.png', 			['unique'] = true, 		['useable'] = false, 	['shouldClose'] = true,	   ['combinable'] = nil,   ['description'] = 'Money?'},
 	['labkey'] 			 			 = {['name'] = 'labkey', 						['label'] = 'Key', 						['weight'] = 500, 		['type'] = 'item', 		['image'] = 'labkey.png', 				['unique'] = true, 		['useable'] = true, 	['shouldClose'] = true,	   ['combinable'] = nil,   ['description'] = 'Key for a lock...?'},
 	['printerdocument'] 			 = {['name'] = 'printerdocument', 				['label'] = 'Document', 				['weight'] = 500, 		['type'] = 'item', 		['image'] = 'printerdocument.png', 		['unique'] = true, 		['useable'] = true, 	['shouldClose'] = true,	   ['combinable'] = nil,   ['description'] = 'A nice document'},
-	['handgunrepairkit_lv1'] 			 = {['name'] = 'handgunrepairkit_lv1', 				['label'] = 'Handgun Repair Kit Lv1', 				['weight'] = 100, 		['type'] = 'item', 		['image'] = 'fixkit.png', 		['unique'] = true, 		['useable'] = true, 	['shouldClose'] = true,	   ['combinable'] = nil,   ['description'] = 'Fix Gun Level 1'},
-	['handgunrepairkit_lv2'] 			 = {['name'] = 'handgunrepairkit_lv2', 				['label'] = 'Handgun Repair Kit Lv2', 				['weight'] = 100, 		['type'] = 'item', 		['image'] = 'fixkit.png', 		['unique'] = true, 		['useable'] = true, 	['shouldClose'] = true,	   ['combinable'] = nil,   ['description'] = 'Fix Gun Level 2'},
-	['meleerepairkit_lv1'] 			 = {['name'] = 'meleerepairkit_lv1', 				['label'] = 'Melee Repair Kit Lv1', 				['weight'] = 100, 		['type'] = 'item', 		['image'] = 'fixkit.png', 		['unique'] = true, 		['useable'] = true, 	['shouldClose'] = true,	   ['combinable'] = nil,   ['description'] = 'Fix Melee Level 1'},
-	['meleerepairkit_lv2'] 			 = {['name'] = 'meleerepairkit_lv2', 				['label'] = 'Melee Repair Kit Lv2', 				['weight'] = 100, 		['type'] = 'item', 		['image'] = 'fixkit.png', 		['unique'] = true, 		['useable'] = true, 	['shouldClose'] = true,	   ['combinable'] = nil,   ['description'] = 'Fix Melee Level 1'},
+	['stress_medicine'] 			 = {['name'] = 'stress_medicine', 				['label'] = 'Stress Medicine', 			['weight'] = 500, 		['type'] = 'item', 		['image'] = 'stress_medicine.png', 		['unique'] = false, 	['useable'] = true, 	['shouldClose'] = true,   ['combinable'] = nil,   ['description'] = 'Stress Medicine'},
+	['handgunrepairkit_lv1'] 		 = {['name'] = 'handgunrepairkit_lv1', 			['label'] = 'Handgun Repair Kit Lv1', 	['weight'] = 100, 		['type'] = 'item', 		['image'] = 'fixkit.png', 				['unique'] = true, 		['useable'] = true, 	['shouldClose'] = true,	   ['combinable'] = nil,   ['description'] = 'Fix Gun Level 1'},
+	['handgunrepairkit_lv2'] 		 = {['name'] = 'handgunrepairkit_lv2', 			['label'] = 'Handgun Repair Kit Lv2', 	['weight'] = 100, 		['type'] = 'item', 		['image'] = 'fixkit.png', 				['unique'] = true, 		['useable'] = true, 	['shouldClose'] = true,	   ['combinable'] = nil,   ['description'] = 'Fix Gun Level 2'},
+	['meleerepairkit_lv1'] 			 = {['name'] = 'meleerepairkit_lv1', 			['label'] = 'Melee Repair Kit Lv1', 	['weight'] = 100, 		['type'] = 'item', 		['image'] = 'fixkit.png', 				['unique'] = true, 		['useable'] = true, 	['shouldClose'] = true,	   ['combinable'] = nil,   ['description'] = 'Fix Melee Level 1'},
+	['meleerepairkit_lv2'] 			 = {['name'] = 'meleerepairkit_lv2', 			['label'] = 'Melee Repair Kit Lv2', 	['weight'] = 100, 		['type'] = 'item', 		['image'] = 'fixkit.png', 				['unique'] = true, 		['useable'] = true, 	['shouldClose'] = true,	   ['combinable'] = nil,   ['description'] = 'Fix Melee Level 1'},
 }

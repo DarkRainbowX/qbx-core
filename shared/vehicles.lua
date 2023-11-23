@@ -1,8 +1,3 @@
-QBShared = QBShared or {}
-
----@type table<number, Vehicle>
-QBShared.VehicleHashes = {}
-
 ---@class Vehicle
 ---@field name string
 ---@field brand string
@@ -10,78 +5,70 @@ QBShared.VehicleHashes = {}
 ---@field price number
 ---@field category string
 ---@field hash string | integer actually just an integer but string is required for types to align when using `asbo` for example
----@field shop string
 
 ---@type table<string, Vehicle>
-QBShared.Vehicles = {
-    --- Mod
+return {
+	--- Mod
 	Yama20g1_Level1 = {
         name = 'Yama 20 Level 1',
-        braces = 'GTFutu',
+        brand = 'GTFutu',
         model = 'Yama20g1_Level1',
         price = 1,
         category = 'motorcycles',
         hash = `Yama20g1_Level1`,
-
     },
     Yama20g1_Level2 = {
         name = 'Yama 20 Level 2',
-        braces = 'GTFutu',
+        brand = 'GTFutu',
         model = 'Yama20g1_Level2',
         price = 1,
         category = 'motorcycles',
         hash = `Yama20g1_Level2`,
-
     },
     Ducag4sp_Level1 = {
         name = 'Ducag Level 1',
-        braces = 'GTFutu',
+        brand = 'GTFutu',
         model = 'Ducag4sp_Level1',
         price = 1,
         category = 'motorcycles',
         hash = `Ducag4sp_Level1`,
-
     },
     Ducag4sp_Level2 = {
         name = 'Ducag Level 2',
-        braces = 'GTFutu',
+        brand = 'GTFutu',
         model = 'Ducag4sp_Level2',
         price = 1,
         category = 'motorcycles',
         hash = `Ducag4sp_Level2`,
-
     },
     Cp500g_Level1 = {
         name = 'CP500 Level 1',
-        braces = 'GTFutu',
+        brand = 'GTFutu',
         model = 'Cp500g_Level1',
         price = 1,
         category = 'motorcycles',
         hash = `Cp500g_Level1`,
-
     },
     Cp500g_Level2 = {
         name = 'CP500 Level 1',
-        braces = 'GTFutu',
+        brand = 'GTFutu',
         model = 'Cp500g_Level2',
         price = 1,
         category = 'motorcycles',
         hash = `Cp500g_Level2`,
-
     },
     CAD5T_LEVEL1 = {
         name = 'Cad5T Level 1',
-        braces = 'GTFutu',
+        brand = 'GTFutu',
         model = 'CAD5T_LEVEL1',
         price = 1,
         category = 'sedans',
         categoryLabel = 'Sedans',
         hash = `CAD5T_LEVEL1`,
-
     },
     CAD5T_LEVEL2 = {
         name = 'Cad5T Level 2',
-        braces = 'GTFutu',
+        brand = 'GTFutu',
         model = 'CAD5T_LEVEL2',
         price = 1,
         category = 'sedans',
@@ -90,7 +77,7 @@ QBShared.Vehicles = {
     },
     SSC20_Level1 = {
         name = '20SSC Level 1',
-        braces = 'GTFutu',
+        brand = 'GTFutu',
         model = 'SSC20_Level1',
         price = 1,
         category = 'sedans',
@@ -99,7 +86,7 @@ QBShared.Vehicles = {
     },
     SSC20_Level2 = {
         name = '20SSC Level 2',
-        braces = 'GTFutu',
+        brand = 'GTFutu',
         model = 'SSC20_Level2',
         price = 1,
         category = 'sedans',
@@ -108,7 +95,7 @@ QBShared.Vehicles = {
     },
     Umerus_Level1 = {
         name = 'Umerus Level 1',
-        braces = 'GTFutu',
+        brand = 'GTFutu',
         model = 'Umerus_Level1',
         price = 1,
         category = 'suvs',
@@ -116,7 +103,7 @@ QBShared.Vehicles = {
     },
     Umerus_Level2 = {
         name = 'Umerus Level 2',
-        braces = 'GTFutu',
+        brand = 'GTFutu',
         model = 'Umerus_Level2',
         price = 1,
         category = 'suvs',
@@ -858,7 +845,7 @@ QBShared.Vehicles = {
 		name = 'Oppressor',
 		brand = 'Pegassi',
 		model = 'oppressor',
-		price = 19,
+		price = 9999999,
 		category = 'super',
 		hash = `oppressor`,
 	},
@@ -4315,7 +4302,3 @@ QBShared.Vehicles = {
         hash = `weevil2`,
     },
 }
-
-for _, v in pairs(QBShared.Vehicles) do
-    QBShared.VehicleHashes[v.hash] = v
-end
