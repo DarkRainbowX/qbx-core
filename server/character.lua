@@ -1,9 +1,9 @@
 local config = require 'config.server'
 
----@param license2 string
+---@param steam string
 ---@param license? string
-local function getAllowedAmountOfCharacters(license2, license)
-    return config.characters.playersNumberOfCharacters[license2] or license and config.characters.playersNumberOfCharacters[license] or config.characters.defaultNumberOfCharacters
+local function getAllowedAmountOfCharacters(license)
+    return config.characters.playersNumberOfCharacters[steam] or license and config.characters.playersNumberOfCharacters[license] or config.characters.defaultNumberOfCharacters
 end
 
 ---@param source Source
@@ -23,9 +23,9 @@ local function giveStarterItems(source)
 end
 
 lib.callback.register('qbx_core:server:getCharacters', function(source)
-    local license2, license = GetPlayerIdentifierByType(source, 'license2'), GetPlayerIdentifierByType(source, 'license')
-    local chars = FetchAllPlayerEntities(license2, license)
-    local allowedAmount = getAllowedAmountOfCharacters(license2, license)
+    local license = GetPlayerIdentifierByType(source, 'steam')
+    local chars = FetchAllPlayerEntities(license)
+    local allowedAmount = getAllowedAmountOfCharacters(license)
     local sortedChars = {}
     for i = 1, #chars do
         local char = chars[i]
@@ -46,7 +46,7 @@ lib.callback.register('qbx_core:server:loadCharacter', function(source, citizenI
     if not player then return end
 
     SetPlayerRoutingBucket(source, 0)
-    TriggerEvent('qb-log:server:CreateLog', 'joinleave', 'Loaded', 'green', '**'.. GetPlayerName(source) .. '** ('..(GetPlayerIdentifierByType(source, 'discord') or 'undefined') ..' |  ||'  ..(GetPlayerIdentifierByType(source, 'ip') or 'undefined') ..  '|| | ' ..(GetPlayerIdentifierByType(source, 'license2') or GetPlayerIdentifierByType(source, 'license') or 'undefined') ..' | ' ..citizenId..' | '..source..') loaded..')
+    TriggerEvent('qb-log:server:CreateLog', 'joinleave', 'Loaded', 'green', '**'.. GetPlayerName(source) .. '** ('..(GetPlayerIdentifierByType(source, 'discord') or 'undefined') ..' |  ||'  ..(GetPlayerIdentifierByType(source, 'ip') or 'undefined') ..  '|| | ' ..(GetPlayerIdentifierByType(source, 'steam') or 'undefined') ..' | ' ..citizenId..' | '..source..') loaded..')
     lib.print.info(GetPlayerName(source)..' (Citizen ID: '..citizenId..') has succesfully loaded!')
 end)
 
