@@ -120,6 +120,7 @@ end
 ---@field phone string
 ---@field account string
 ---@field card number
+---@field iban number
 
 ---@class PlayerMetadata
 ---@field health number

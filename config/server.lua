@@ -5,15 +5,15 @@ return {
         ---@alias MoneyType 'cash' | 'bank' | 'crypto'
         ---@alias Money {cash: number, bank: number, crypto: number}
         ---@type Money
-        moneyTypes = { cash = 500, bank = 5000, crypto = 0 }, -- type = startamount - Add or remove money types for your server (for ex. blackmoney = 0), remember once added it will not be removed from the database!
-        dontAllowMinus = { 'cash', 'crypto' }, -- Money that is not allowed going in minus
-        paycheckTimeout = 10, -- The time in minutes that it will give the paycheck
+        moneyTypes = { cash = 1000, bank = 1000, crypto = 0 }, -- type = startamount - Add or remove money types for your server (for ex. blackmoney = 0), remember once added it will not be removed from the database!
+        dontAllowMinus = { 'cash', 'crypto', 'bank' }, -- Money that is not allowed going in minus
+        paycheckTimeout = 48, -- The time in minutes that it will give the paycheck
         paycheckSociety = false -- If true paycheck will come from the society account that the player is employed at, requires qb-management
     },
 
     player = {
-        hungerRate = 4.2, -- Rate at which hunger goes down.
-        thirstRate = 3.8, -- Rate at which thirst goes down.
+        hungerRate = 10.5, -- Rate at which hunger goes down.
+        thirstRate = 10.5, -- Rate at which thirst goes down.
 
         ---@enum BloodType
         bloodTypes = {
@@ -30,7 +30,7 @@ return {
             },
             AccountNumber = {
                 valueFunction = function()
-                    return 'US0' .. math.random(1, 9) .. 'QBX' .. math.random(1111, 9999) .. math.random(1111, 9999) .. math.random(11, 99)
+                    return 'G' .. math.random(1, 9) .. math.random(1111, 9999) .. math.random(1111, 9999) .. math.random(11, 99)
                 end,
             },
             PhoneNumber = {
@@ -45,7 +45,7 @@ return {
             },
             WalletId = {
                 valueFunction = function()
-                    return 'QB-' .. math.random(11111111, 99999999)
+                    return 'GTFutu' .. math.random(11111111, 99999999)
                 end,
             },
             SerialNumber = {
@@ -82,7 +82,7 @@ return {
         closedReason = 'Server Closed', -- Reason message to display when people can't join the server
         whitelist = false, -- Enable or disable whitelist on the server
         whitelistPermission = 'admin', -- Permission that's able to enter the server when the whitelist is on
-        discord = '', -- Discord invite link
+        discord = 'https://discord.gg/PSgRme6vSJ', -- Discord invite link
         checkDuplicateLicense = true, -- Check for duplicate rockstar license on join
         permissions = { 'god', 'admin', 'mod' }, -- Add as many groups as you want here after creating them in your server.cfg
     },
@@ -92,7 +92,7 @@ return {
             ['license2:xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx'] = 5,
         },
 
-        defaultNumberOfCharacters = 3, -- Define maximum amount of default characters (maximum 3 characters defined by default)
+        defaultNumberOfCharacters = 1, -- Define maximum amount of default characters (maximum 3 characters defined by default)
     },
 
     ---@type { name: string, amount: integer, metadata: fun(source: number): table }[]
@@ -121,7 +121,7 @@ return {
     getSocietyAccount = function(accountName)
         return exports.qbx_management:GetAccount(accountName)
     end,
-    
+
     removeSocietyMoney = function(accountName, payment)
         return exports.qbx_management:RemoveMoney(accountName, payment)
     end

@@ -84,7 +84,7 @@ function CheckPlayerData(source, playerData)
     playerData.charinfo.phone = playerData.charinfo.phone or GenerateUniqueIdentifier('PhoneNumber')
     playerData.charinfo.account = playerData.charinfo.account or GenerateUniqueIdentifier('AccountNumber')
     playerData.charinfo.cid = playerData.charinfo.cid or playerData.cid
-    PlayerData.charinfo.iban = PlayerData.charinfo.iban ~= nil and PlayerData.charinfo.iban or math.random(0,999999)
+    playerData.charinfo.iban = playerData.charinfo.iban or math.random(0,999999)
     -- Metadata
     playerData.metadata = playerData.metadata or {}
     playerData.metadata.health = playerData.metadata.health or 200

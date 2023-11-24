@@ -1,13 +1,13 @@
 return {
-    statusIntervalSeconds = 5, -- how often to check hunger/thirst status to remove health if 0.
+    statusIntervalSeconds = 2.5, -- how often to check hunger/thirst status to remove health if 0.
     loadingModelsTimeout = 10000, -- Waiting time for ox_lib to load the models before throws an error, for low specs pc
 
-    pauseMapText = 'Powered by Qbox', -- Text shown above the map when ESC is pressed. If left empty 'FiveM' will appear
+    pauseMapText = 'Powered by GTFutu', -- Text shown above the map when ESC is pressed. If left empty 'FiveM' will appear
 
     characters = {
         useExternalCharacters = false, -- Whether you have an external character management resource. (If true, disables the character management inside the core)
         enableDeleteButton = true, -- Whether players should be able to delete characters themselves.
-        startingApartment = true, -- If set to false, skips apartment choice in the beginning (requires qbx_spawn if true)
+        startingApartment = false, -- If set to false, skips apartment choice in the beginning (requires qbx_spawn if true)
 
         profanityWords = {
             ['bad word'] = true
@@ -68,6 +68,6 @@ return {
 
     --- Only used by QB bridge
     hasKeys = function()
-        return exports['qb-vehiclekeys']:HasKeys()
+        return exports['qbx-vehiclekeys']:HasKeys()
     end,
 }
