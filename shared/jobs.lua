@@ -12,7 +12,7 @@ return {
 		defaultDuty = true,
 		offDutyPay = false,
 		grades = {
-            ['0'] = {
+            [0] = {
                 name = 'Unemployed',
                 payment = 40
             },
@@ -24,27 +24,27 @@ return {
 		defaultDuty = true,
 		offDutyPay = false,
 		grades = {
-            ['0'] = {
+            [0] = {
                 name = 'Recruit',
                 payment = 40
             },
-			['1'] = {
+			[1] = {
                 name = 'Officer',
                 payment = 40
             },
-			['2'] = {
+			[2] = {
                 name = 'Sergeant',
                 payment = 40
             },
-			['3'] = {
+			[3] = {
                 name = 'Lieutenant',
                 payment = 40
             },
-            ['4'] = {
+            [4] = {
                 name = 'Colonel',
                 payment = 40
             },
-			['10'] = {
+			[10] = {
                 name = 'Chief',
 				isboss = true,
                 payment = 40
@@ -57,27 +57,27 @@ return {
 		defaultDuty = true,
 		offDutyPay = false,
 		grades = {
-            ['0'] = {
+            [0] = {
                 name = 'Recruit',
                 payment = 800
             },
-			['1'] = {
+			[1] = {
                 name = 'Paramedic',
                 payment = 800
             },
-			['2'] = {
+			[2] = {
                 name = 'Doctor',
                 payment = 800
             },
-			['3'] = {
+			[3] = {
                 name = 'Senior Doctor',
                 payment = 800
             },
-            ['4'] = {
+            [4] = {
                 name = 'Surgeon',
                 payment = 800
             },
-			['10']  = {
+			[10]  = {
                 name = 'Director',
 				isboss = true,
                 payment = 800
@@ -89,23 +89,23 @@ return {
 		defaultDuty = true,
 		offDutyPay = false,
 		grades = {
-            ['0'] = {
+            [0] = {
                 name = 'Recruit',
                 payment = 40
             },
-			['1'] = {
+			[1] = {
                 name = 'House Sales',
                 payment = 40
             },
-			['2'] = {
+			[2] = {
                 name = 'Business Sales',
                 payment = 40
             },
-			['3'] = {
+			[3] = {
                 name = 'Broker',
                 payment = 40
             },
-			['4'] = {
+			[4] = {
                 name = 'Manager',
 				isboss = true,
                 payment = 40
@@ -117,23 +117,23 @@ return {
 		defaultDuty = true,
 		offDutyPay = false,
 		grades = {
-            ['0'] = {
+            [0] = {
                 name = 'Recruit',
                 payment = 40
             },
-			['1'] = {
+			[1] = {
                 name = 'Driver',
                 payment = 40
             },
-			['2'] = {
+			[2] = {
                 name = 'Limo Driver',
                 payment = 40
             },
-			['3'] = {
+			[3] = {
                 name = 'Sales',
                 payment = 40
             },
-			['4'] = {
+			[4] = {
                 name = 'Manager',
 				isboss = true,
                 payment = 40
@@ -156,23 +156,23 @@ return {
 		defaultDuty = true,
 		offDutyPay = false,
 		grades = {
-            ['0'] = {
+            [0] = {
                 name = 'Recruit',
                 payment = 40
             },
-			['1'] = {
+			[1] = {
                 name = 'Showroom Sales',
                 payment = 40
             },
-			['2'] = {
+			[2] = {
                 name = 'Business Sales',
                 payment = 40
             },
-			['3'] = {
+			[3] = {
                 name = 'Finance',
                 payment = 40
             },
-			['4'] = {
+			[4] = {
                 name = 'Manager',
 				isboss = true,
                 payment = 40
@@ -185,23 +185,23 @@ return {
 		defaultDuty = true,
 		offDutyPay = false,
 		grades = {
-            ['0'] = {
+            [0] = {
                 name = 'Recruit',
                 payment = 40
             },
-			['1'] = {
+			[1] = {
                 name = 'Novice',
                 payment = 40
             },
-			['2'] = {
+			[2] = {
                 name = 'Experienced',
                 payment = 40
             },
-			['3'] = {
+			[3] = {
                 name = 'Advanced',
                 payment = 40
             },
-			['4'] = {
+			[4] = {
                 name = 'Manager',
 				isboss = true,
                 payment = 40
@@ -213,7 +213,7 @@ return {
 		defaultDuty = true,
 		offDutyPay = false,
 		grades = {
-            ['0'] = {
+            [0] = {
                 name = 'Judge',
                 payment = 40
             },
@@ -224,7 +224,7 @@ return {
 		defaultDuty = true,
 		offDutyPay = false,
 		grades = {
-            ['0'] = {
+            [0] = {
                 name = 'Associate',
                 payment = 40
             },
@@ -235,7 +235,7 @@ return {
 		defaultDuty = true,
 		offDutyPay = false,
 		grades = {
-            ['0'] = {
+            [0] = {
                 name = 'Journalist',
                 payment = 40
             },
@@ -246,7 +246,7 @@ return {
 		defaultDuty = true,
 		offDutyPay = false,
 		grades = {
-            ['0'] = {
+            [0] = {
                 name = 'Transporter',
                 payment = 40
             },
@@ -257,7 +257,7 @@ return {
 		defaultDuty = true,
 		offDutyPay = false,
 		grades = {
-            ['0'] = {
+            [0] = {
                 name = 'Driver',
                 payment = 40
             },
@@ -268,7 +268,7 @@ return {
 		defaultDuty = true,
 		offDutyPay = false,
 		grades = {
-            ['0'] = {
+            [0] = {
                 name = 'Worker',
                 payment = 40
             },
@@ -279,7 +279,7 @@ return {
 		defaultDuty = true,
 		offDutyPay = false,
 		grades = {
-            ['0'] = {
+            [0] = {
                 name = 'Picker',
                 payment = 40
             },
@@ -312,7 +312,7 @@ return {
 		defaultDuty = true,
 		offDutyPay = false,
 		grades = {
-            ['0'] = {
+            [0] = {
                 name = 'Worker',
                 payment = 40
             },
@@ -323,7 +323,7 @@ return {
 		defaultDuty = true,
 		offDutyPay = false,
 		grades = {
-            ['0'] = {
+            [0] = {
                 name = 'Logger',
                 payment = 40
             },
@@ -334,7 +334,7 @@ return {
 		defaultDuty = true,
 		offDutyPay = false,
 		grades = {
-            ['0'] = {
+            [0] = {
                 name = 'Miner',
                 payment = 40
             },
@@ -345,7 +345,7 @@ return {
 		defaultDuty = true,
 		offDutyPay = false,
 		grades = {
-            ['0'] = {
+            [0] = {
                 name = 'Farmer',
                 payment = 40
             },
@@ -357,7 +357,7 @@ return {
 		defaultDuty = true,
 		offDutyPay = false,
 		grades = {
-            ['0'] = {
+            [0] = {
                 name = 'StreetArt',
                 payment = 0
             },
@@ -369,7 +369,7 @@ return {
 		defaultDuty = true,
 		offDutyPay = false,
 		grades = {
-            ['0'] = {
+            [0] = {
                 name = 'Mining',
                 payment = 0
             },
@@ -382,7 +382,7 @@ return {
 		defaultDuty = true,
 		offDutyPay = false,
 		grades = {
-            ['0'] = {
+            [0] = {
                 name = 'RaceReator',
                 payment = 0
             },

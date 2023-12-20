@@ -5,7 +5,7 @@ return {
         ---@alias MoneyType 'cash' | 'bank' | 'crypto'
         ---@alias Money {cash: number, bank: number, crypto: number}
         ---@type Money
-        moneyTypes = { cash = 1000, bank = 1000, crypto = 0 }, -- type = startamount - Add or remove money types for your server (for ex. blackmoney = 0), remember once added it will not be removed from the database!
+        moneyTypes = { cash = 5000, bank = 5000, crypto = 0 }, -- type = startamount - Add or remove money types for your server (for ex. blackmoney = 0), remember once added it will not be removed from the database!
         dontAllowMinus = { 'cash', 'crypto', 'bank' }, -- Money that is not allowed going in minus
         paycheckTimeout = 48, -- The time in minutes that it will give the paycheck
         paycheckSociety = false -- If true paycheck will come from the society account that the player is employed at, requires qb-management
@@ -63,7 +63,7 @@ return {
     characterDataTables = {
         players = 'citizenid',
         apartments = 'citizenid',
-        bank_accounts_new = 'id',
+        bank_accounts = 'id',
         crypto_transactions = 'citizenid',
         phone_invoices = 'citizenid',
         phone_messages = 'citizenid',
