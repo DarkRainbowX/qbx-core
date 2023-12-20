@@ -63,7 +63,7 @@ return {
     characterDataTables = {
         players = 'citizenid',
         apartments = 'citizenid',
-        bank_accounts = 'id',
+        bank_accounts = 'citizenid',
         crypto_transactions = 'citizenid',
         phone_invoices = 'citizenid',
         phone_messages = 'citizenid',
