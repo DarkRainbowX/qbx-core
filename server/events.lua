@@ -1,4 +1,7 @@
 local serverConfig = require 'config.server'.server
+local loggingConfig = require 'config.server'.logging
+local logger = require 'modules.logger'
+local queue = require 'server.queue'
 
 -- Event Handler
 
@@ -33,7 +36,13 @@ AddEventHandler('playerDropped', function(reason)
     if not QBX.Players[src] then return end
     GlobalState.PlayerCount -= 1
     local player = QBX.Players[src]
-    TriggerEvent('qb-log:server:CreateLog', 'joinleave', 'Dropped', 'red', '**' .. GetPlayerName(src) .. '** (' .. player.PlayerData.license .. ') left..' ..'\n **Reason:** ' .. reason)
+    logger.log({
+        source = 'qbx_core',
+        webhook = loggingConfig.webhook['joinleave'],
+        event = 'Dropped',
+        color = 'red',
+        message = '**' .. GetPlayerName(src) .. '** (' .. player.PlayerData.license .. ') left..' ..'\n **Reason:** ' .. reason,
+    })
     player.Functions.Save()
     QBX.Player_Buckets[player.PlayerData.license] = nil
     QBX.Players[src] = nil
@@ -51,8 +60,7 @@ end)
 ---@param deferrals Deferrals
 local function onPlayerConnecting(name, _, deferrals)
     local src = source --[[@as string]]
-    local license
-    local identifiers = GetPlayerIdentifiers(src)
+    local license = GetPlayerIdentifierByType(src, 'steam')
     deferrals.defer()
 
     -- Mandatory wait
@@ -61,13 +69,6 @@ local function onPlayerConnecting(name, _, deferrals)
     if serverConfig.closed then
         if not IsPlayerAceAllowed(src, 'qbadmin.join') then
             deferrals.done(serverConfig.closedReason)
-        end
-    end
-
-    for _, v in pairs(identifiers) do
-        if string.find(v, 'steam') then
-            license = v
-            break
         end
     end
 
@@ -108,7 +109,11 @@ local function onPlayerConnecting(name, _, deferrals)
     -- wait for database to finish
     databasePromise:next(function()
         deferrals.update(string.format(Lang:t('info.join_server'), name))
-        deferrals.done()
+        if queue then
+            queue.awaitPlayerQueue(src --[[@as Source]], license, deferrals)
+        else
+            deferrals.done()
+        end
     end, function(err)
         deferrals.done(Lang:t('error.connecting_error'))
         lib.print.error(err)

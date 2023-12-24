@@ -1,5 +1,6 @@
 local config = require 'config.server'
 local defaultSpawn = require 'config.shared'.defaultSpawn
+local logger = require 'modules.logger'
 
 ---@class PlayerData : PlayerEntity
 ---@field source? Source present if player is online
@@ -32,7 +33,14 @@ function LoginV2(source, citizenid, newData)
             return CheckPlayerData(source, playerData)
         else
             DropPlayer(tostring(source), Lang:t("info.exploit_dropped"))
-            TriggerEvent('qb-log:server:CreateLog', 'anticheat', 'Anti-Cheat', 'white', ('%s Has Been Dropped For Character Joining Exploit'):format(GetPlayerName(source)), false)
+            logger.log({
+                source = 'qbx_core',
+                webhook = config.logging.webhook['anticheat'],
+                event = 'Anti-Cheat',
+                color = 'white',
+                tags = config.logging.role,
+                message = ('%s Has Been Dropped For Character Joining Exploit'):format(GetPlayerName(source))
+            })
         end
     else
         local player = CheckPlayerData(source, newData)
@@ -84,7 +92,6 @@ function CheckPlayerData(source, playerData)
     playerData.charinfo.phone = playerData.charinfo.phone or GenerateUniqueIdentifier('PhoneNumber')
     playerData.charinfo.account = playerData.charinfo.account or GenerateUniqueIdentifier('AccountNumber')
     playerData.charinfo.cid = playerData.charinfo.cid or playerData.cid
-    playerData.charinfo.iban = playerData.charinfo.iban or math.random(0,999999)
     -- Metadata
     playerData.metadata = playerData.metadata or {}
     playerData.metadata.health = playerData.metadata.health or 200
@@ -100,8 +107,6 @@ function CheckPlayerData(source, playerData)
     playerData.metadata.jailitems = playerData.metadata.jailitems or {}
     playerData.metadata.status = playerData.metadata.status or {}
     playerData.metadata.phone = playerData.metadata.phone or {}
-    playerData.metadata.fitbit = playerData.metadata.fitbit or {}
-    playerData.metadata.commandbinds = playerData.metadata.commandbinds or {}
     playerData.metadata.bloodtype = playerData.metadata.bloodtype or config.player.bloodTypes[math.random(1, #config.player.bloodTypes)]
     playerData.metadata.dealerrep = playerData.metadata.dealerrep or 0
     playerData.metadata.craftingrep = playerData.metadata.craftingrep or 0
@@ -346,11 +351,15 @@ function CreatePlayer(playerData, Offline)
 
         if not self.Offline then
             self.Functions.UpdatePlayerData()
-            if amount > 100000 then
-                TriggerEvent('qb-log:server:CreateLog', 'playermoney', 'AddMoney', 'lightgreen', '**' .. GetPlayerName(self.PlayerData.source) .. ' (citizenid: ' .. self.PlayerData.citizenid .. ' | id: ' .. self.PlayerData.source .. ')** $' .. amount .. ' (' .. moneytype .. ') added, new ' .. moneytype .. ' balance: ' .. self.PlayerData.money[moneytype] .. ' reason: ' .. reason, true)
-            else
-                TriggerEvent('qb-log:server:CreateLog', 'playermoney', 'AddMoney', 'lightgreen', '**' .. GetPlayerName(self.PlayerData.source) .. ' (citizenid: ' .. self.PlayerData.citizenid .. ' | id: ' .. self.PlayerData.source .. ')** $' .. amount .. ' (' .. moneytype .. ') added, new ' .. moneytype .. ' balance: ' .. self.PlayerData.money[moneytype] .. ' reason: ' .. reason)
-            end
+            local tags = amount > 100000 and config.logging.role or nil
+            logger.log({
+                source = 'qbx_core',
+                webhook = config.logging.webhook['playermoney'],
+                event = 'AddMoney',
+                color = 'lightgreen',
+                tags = tags,
+                message = '**' .. GetPlayerName(self.PlayerData.source) .. ' (citizenid: ' .. self.PlayerData.citizenid .. ' | id: ' .. self.PlayerData.source .. ')** $' .. amount .. ' (' .. moneytype .. ') added, new ' .. moneytype .. ' balance: ' .. self.PlayerData.money[moneytype] .. ' reason: ' .. reason,
+            })
             TriggerClientEvent('hud:client:OnMoneyChange', self.PlayerData.source, moneytype, amount, false)
             TriggerClientEvent('QBCore:Client:OnMoneyChange', self.PlayerData.source, moneytype, amount, "add", reason)
             TriggerEvent('QBCore:Server:OnMoneyChange', self.PlayerData.source, moneytype, amount, "add", reason)
@@ -379,11 +388,15 @@ function CreatePlayer(playerData, Offline)
 
         if not self.Offline then
             self.Functions.UpdatePlayerData()
-            if amount > 100000 then
-                TriggerEvent('qb-log:server:CreateLog', 'playermoney', 'RemoveMoney', 'red', '**' .. GetPlayerName(self.PlayerData.source) .. ' (citizenid: ' .. self.PlayerData.citizenid .. ' | id: ' .. self.PlayerData.source .. ')** $' .. amount .. ' (' .. moneytype .. ') removed, new ' .. moneytype .. ' balance: ' .. self.PlayerData.money[moneytype] .. ' reason: ' .. reason, true)
-            else
-                TriggerEvent('qb-log:server:CreateLog', 'playermoney', 'RemoveMoney', 'red', '**' .. GetPlayerName(self.PlayerData.source) .. ' (citizenid: ' .. self.PlayerData.citizenid .. ' | id: ' .. self.PlayerData.source .. ')** $' .. amount .. ' (' .. moneytype .. ') removed, new ' .. moneytype .. ' balance: ' .. self.PlayerData.money[moneytype] .. ' reason: ' .. reason)
-            end
+            local tags = amount > 100000 and config.logging.role or nil
+            logger.log({
+                source = 'qbx_core',
+                webhook = config.logging.webhook['playermoney'],
+                event = 'RemoveMoney',
+                color = 'red',
+                tags = tags,
+                message = '**' .. GetPlayerName(self.PlayerData.source) .. ' (citizenid: ' .. self.PlayerData.citizenid .. ' | id: ' .. self.PlayerData.source .. ')** $' .. amount .. ' (' .. moneytype .. ') removed, new ' .. moneytype .. ' balance: ' .. self.PlayerData.money[moneytype] .. ' reason: ' .. reason,
+            })
             TriggerClientEvent('hud:client:OnMoneyChange', self.PlayerData.source, moneytype, amount, true)
             if moneytype == 'bank' then
                 TriggerClientEvent('qb-phone:client:RemoveBankMoney', self.PlayerData.source, amount)
@@ -409,7 +422,13 @@ function CreatePlayer(playerData, Offline)
 
         if not self.Offline then
             self.Functions.UpdatePlayerData()
-            TriggerEvent('qb-log:server:CreateLog', 'playermoney', 'SetMoney', 'green', '**' .. GetPlayerName(self.PlayerData.source) .. ' (citizenid: ' .. self.PlayerData.citizenid .. ' | id: ' .. self.PlayerData.source .. ')** $' .. amount .. ' (' .. moneytype .. ') set, new ' .. moneytype .. ' balance: ' .. self.PlayerData.money[moneytype] .. ' reason: ' .. reason)
+            logger.log({
+                source = 'qbx_core',
+                webhook = config.logging.webhook['playermoney'],
+                event = 'SetMoney',
+                color = 'green',
+                message = '**' .. GetPlayerName(self.PlayerData.source) .. ' (citizenid: ' .. self.PlayerData.citizenid .. ' | id: ' .. self.PlayerData.source .. ')** $' .. amount .. ' (' .. moneytype .. ') set, new ' .. moneytype .. ' balance: ' .. self.PlayerData.money[moneytype] .. ' reason: ' .. reason,
+            })
             TriggerClientEvent('hud:client:OnMoneyChange', self.PlayerData.source, moneytype, math.abs(difference), difference < 0)
             TriggerClientEvent('QBCore:Client:OnMoneyChange', self.PlayerData.source, moneytype, amount, "set", reason)
             TriggerEvent('QBCore:Server:OnMoneyChange', self.PlayerData.source, moneytype, amount, "set", reason)
@@ -519,12 +538,25 @@ function DeleteCharacter(source, citizenid)
         CreateThread(function()
             local success = DeletePlayerEntity(citizenid)
             if success then
-                TriggerEvent('qb-log:server:CreateLog', 'joinleave', 'Character Deleted', 'red', '**' .. GetPlayerName(source) .. '** ' .. license .. ' deleted **' .. citizenid .. '**..')
+                logger.log({
+                    source = 'qbx_core',
+                    webhook = config.logging.webhook['joinleave'],
+                    event = 'Character Deleted',
+                    color = 'red',
+                    message = '**' .. GetPlayerName(source) .. '** ' .. license .. ' deleted **' .. citizenid .. '**..'
+                })
             end
         end)
     else
         DropPlayer(tostring(source), Lang:t("info.exploit_dropped"))
-        TriggerEvent('qb-log:server:CreateLog', 'anticheat', 'Anti-Cheat', 'white', GetPlayerName(source) .. ' Has Been Dropped For Character Deletion Exploit', true)
+        logger.log({
+            source = 'qbx_core',
+            webhook = config.logging.webhook['anticheat'],
+            event = 'Anti-Cheat',
+            color = 'white',
+            tags = config.logging.role,
+            message = GetPlayerName(source) .. ' Has Been Dropped For Character Deletion Exploit',
+        })
     end
 end
 
@@ -540,7 +572,13 @@ function ForceDeleteCharacter(citizenid)
         CreateThread(function()
             local success = DeletePlayerEntity(citizenid)
             if success then
-                TriggerEvent('qb-log:server:CreateLog', 'joinleave', 'Character Force Deleted', 'red', 'Character **' .. citizenid .. '** got deleted')
+                logger.log({
+                    source = 'qbx_core',
+                    webhook = config.logging.webhook['joinleave'],
+                    event = 'Character Force Deleted',
+                    color = 'red',
+                    message = 'Character **' .. citizenid .. '** got deleted'
+                })
             end
         end)
     end

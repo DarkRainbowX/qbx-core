@@ -3,7 +3,7 @@
 ---@field type? string
 ---@field defaultDuty boolean
 ---@field offDutyPay boolean
----@field grades table<integer, {name: string, payment: number, isboss: boolean}>
+---@field grades table<integer, {name: string, payment: number, isboss: boolean, bankAuth: boolean}>
 
 ---@type table<string, Job>
 return {
@@ -46,8 +46,69 @@ return {
             },
 			[10] = {
                 name = 'Chief',
-				isboss = true,
-                payment = 40
+                isboss = true,
+                bankAuth = true,
+                payment = 150
+            },
+        },
+	},
+	['bcso'] = {
+		label = 'BCSO',
+        type = 'leo',
+		defaultDuty = true,
+		offDutyPay = false,
+		grades = {
+            [0] = {
+                name = 'Recruit',
+                payment = 50
+            },
+			[1] = {
+                name = 'Officer',
+                payment = 75
+            },
+			[2] = {
+                name = 'Sergeant',
+                payment = 100
+            },
+			[3] = {
+                name = 'Lieutenant',
+                payment = 125
+            },
+			[4] = {
+                name = 'Chief',
+                isboss = true,
+                bankAuth = true,
+                payment = 150
+            },
+        },
+	},
+	['sasp'] = {
+		label = 'SASP',
+        type = 'leo',
+		defaultDuty = true,
+		offDutyPay = false,
+		grades = {
+            [0] = {
+                name = 'Recruit',
+                payment = 50
+            },
+			[1] = {
+                name = 'Officer',
+                payment = 75
+            },
+			[2] = {
+                name = 'Sergeant',
+                payment = 100
+            },
+			[3] = {
+                name = 'Lieutenant',
+                payment = 125
+            },
+			[4] = {
+                name = 'Chief',
+                isboss = true,
+                bankAuth = true,
+                payment = 150
             },
         },
 	},
@@ -73,14 +134,11 @@ return {
                 name = 'Senior Doctor',
                 payment = 800
             },
-            [4] = {
-                name = 'Surgeon',
-                payment = 800
-            },
-			[10]  = {
-                name = 'Director',
-				isboss = true,
-                payment = 800
+			[4] = {
+                name = 'Chief',
+                isboss = true,
+                bankAuth = true,
+                payment = 150
             },
         },
 	},
@@ -107,8 +165,9 @@ return {
             },
 			[4] = {
                 name = 'Manager',
-				isboss = true,
-                payment = 40
+                isboss = true,
+                bankAuth = true,
+                payment = 150
             },
         },
 	},
@@ -135,8 +194,9 @@ return {
             },
 			[4] = {
                 name = 'Manager',
-				isboss = true,
-                payment = 40
+                isboss = true,
+                bankAuth = true,
+                payment = 150
             },
         },
 	},
@@ -174,8 +234,9 @@ return {
             },
 			[4] = {
                 name = 'Manager',
-				isboss = true,
-                payment = 40
+                isboss = true,
+                bankAuth = true,
+                payment = 150
             },
         },
 	},
@@ -203,8 +264,9 @@ return {
             },
 			[4] = {
                 name = 'Manager',
-				isboss = true,
-                payment = 40
+                isboss = true,
+                bankAuth = true,
+                payment = 150
             },
         },
 	},
